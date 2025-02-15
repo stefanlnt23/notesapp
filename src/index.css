@@ -1,35 +1,76 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
-  color: rgba(255, 255, 255, 0.87);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
+@layer base {
+  body {
+    @apply bg-primary text-white;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
 }
 
-.card {
-  padding: 2em;
+@layer components {
+  .btn {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-secondary text-primary hover:bg-secondary-light;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-secondary text-secondary hover:bg-secondary/10;
+  }
+
+  .nav-link {
+    @apply text-gray-300 hover:text-secondary transition-colors duration-300;
+  }
+
+  .section {
+    @apply py-20;
+  }
+
+  .card {
+    @apply bg-primary-light rounded-xl p-6 hover:shadow-xl transition-all duration-300;
+  }
 }
 
-.read-the-docs {
-  color: #888;
+/* Custom animations */
+.gradient-text {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-secondary via-accent to-secondary animate-gradient-x;
 }
 
-.box:nth-child(3n + 1) {
-  grid-column: 1;
+.floating {
+  animation: floating 3s ease-in-out infinite;
 }
-.box:nth-child(3n + 2) {
-  grid-column: 2;
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
-.box:nth-child(3n + 3) {
-  grid-column: 3;
+
+/* Scroll animations */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Three.js canvas */
+.canvas-container {
+  @apply fixed top-0 left-0 w-full h-full -z-10 opacity-50;
 }
