@@ -1,22 +1,22 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
 const schema = a.schema({
-  BlogPost: a
-    .model({
-      title: a.string(),
-      content: a.string(),
-      slug: a.string(),
-      status: a.string(),
-      category: a.string(),
-      featuredImage: a.string(),
-      createdAt: a.string(),
-      updatedAt: a.string()
-    })
-    // .authorization((allow) => [
-    //   allow.public().to(['read']),
-    //   allow.owner().to(['create', 'update', 'delete'])
-    // ])
-  ,
+  // BlogPost: a
+  //   .model({
+  //     title: a.string(),
+  //     content: a.string(),
+  //     slug: a.string(),
+  //     status: a.string(),
+  //     category: a.string(),
+  //     featuredImage: a.string(),
+  //     createdAt: a.string(),
+  //     updatedAt: a.string()
+  //   })
+  //   // .authorization((allow) => [
+  //   //   allow.public().to(['read']),
+  //   //   allow.owner().to(['create', 'update', 'delete'])
+  //   // ])
+  // ,
 
   Service: a
     .model({
