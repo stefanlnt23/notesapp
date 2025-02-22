@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { generateClient } from 'aws-amplify/data';
-import { uploadData } from 'aws-amplify/storage';
 import {
   PencilIcon,
   TrashIcon,
   PlusIcon,
   XMarkIcon,
-  PhotoIcon,
   ArrowUpIcon,
   ArrowDownIcon
 } from '@heroicons/react/24/outline';
@@ -27,7 +25,6 @@ export default function AdminServices() {
     orderIndex: 0,
     isActive: true
   });
-  const [selectedIcon, setSelectedIcon] = useState(null);
 
   useEffect(() => {
     fetchServices();
@@ -80,27 +77,15 @@ export default function AdminServices() {
       orderIndex: 0,
       isActive: true
     });
-    setSelectedIcon(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let iconKey = null;
-      if (selectedIcon) {
-        const fileName = `${Date.now()}-${selectedIcon.name}`;
-        await uploadData({
-          path: `services/${fileName}`,
-          data: selectedIcon
-        }).result;
-        iconKey = fileName;
-      }
-
       const serviceData = {
         ...formData,
         features: formData.features.split('\n').filter(f => f.trim()),
         technologies: formData.technologies.split('\n').filter(t => t.trim()),
-        icon: iconKey || (editingService?.icon || null)
       };
 
       if (editingService) {
@@ -322,28 +307,6 @@ export default function AdminServices() {
                   className="w-full px-4 py-2 bg-primary border border-gray-700 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                   required
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Icon
-                </label>
-                <div className="flex items-center space-x-4">
-                  <label className="flex items-center justify-center w-32 h-32 border-2 border-dashed border-gray-700 rounded-lg cursor-pointer hover:border-secondary transition-colors duration-300">
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => setSelectedIcon(e.target.files[0])}
-                    />
-                    <PhotoIcon className="h-8 w-8 text-gray-400" />
-                  </label>
-                  {selectedIcon && (
-                    <div>
-                      <p className="text-sm text-gray-400">{selectedIcon.name}</p>
-                    </div>
-                  )}
-                </div>
               </div>
 
               <div>

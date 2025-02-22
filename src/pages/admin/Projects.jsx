@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { generateClient } from 'aws-amplify/data';
-import { uploadData } from 'aws-amplify/storage';
 import {
   PencilIcon,
   TrashIcon,
   PlusIcon,
   XMarkIcon,
-  PhotoIcon,
   StarIcon as StarIconOutline
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
@@ -27,7 +25,6 @@ export default function AdminProjects() {
     githubUrl: '',
     isFeatured: false
   });
-  const [selectedImages, setSelectedImages] = useState([]);
 
   useEffect(() => {
     fetchProjects();
@@ -80,29 +77,14 @@ export default function AdminProjects() {
       githubUrl: '',
       isFeatured: false
     });
-    setSelectedImages([]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let imageKeys = [];
-      if (selectedImages.length > 0) {
-        const uploadPromises = selectedImages.map(async (image) => {
-          const fileName = `${Date.now()}-${image.name}`;
-          await uploadData({
-            path: `projects/${fileName}`,
-            data: image
-          }).result;
-          return fileName;
-        });
-        imageKeys = await Promise.all(uploadPromises);
-      }
-
       const projectData = {
         ...formData,
         technologies: formData.technologies.split('\n').filter(t => t.trim()),
-        images: imageKeys.length > 0 ? imageKeys : (editingProject?.images || [])
       };
 
       if (editingProject) {
@@ -300,31 +282,6 @@ export default function AdminProjects() {
                   onChange={(e) => setFormData({ ...formData, githubUrl: e.target.value })}
                   className="w-full px-4 py-2 bg-primary border border-gray-700 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Project Images
-                </label>
-                <div className="flex items-center space-x-4">
-                  <label className="flex items-center justify-center w-32 h-32 border-2 border-dashed border-gray-700 rounded-lg cursor-pointer hover:border-secondary transition-colors duration-300">
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      multiple
-                      onChange={(e) => setSelectedImages(Array.from(e.target.files))}
-                    />
-                    <PhotoIcon className="h-8 w-8 text-gray-400" />
-                  </label>
-                  {selectedImages.length > 0 && (
-                    <div>
-                      <p className="text-sm text-gray-400">
-                        {selectedImages.length} image(s) selected
-                      </p>
-                    </div>
-                  )}
-                </div>
               </div>
 
               <div>
